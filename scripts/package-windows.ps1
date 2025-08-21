@@ -31,6 +31,12 @@ $publishArgs = @(
   "--self-contained", $scValue
 )
 
+# Use repo NuGet.config if present (helps resolve feeds like nuget.org v3)
+$nugetConfig = Join-Path $repoRoot "NuGet.config"
+if (Test-Path $nugetConfig) {
+  $publishArgs += @("--configfile", $nugetConfig)
+}
+
 Write-Host "Publishing: dotnet $($publishArgs -join ' ')" -ForegroundColor Cyan
 & dotnet @publishArgs
 
