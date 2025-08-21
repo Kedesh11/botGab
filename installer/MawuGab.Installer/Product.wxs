@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+  <Product Id='*' Name="M'awuGab Agent" Language='1033' Version='1.0.0.0' Manufacturer='YourOrg' UpgradeCode='B3B964A7-6307-4FBB-8E7E-1A33D9F3C111'>
+    <Package InstallerVersion='500' Compressed='yes' InstallScope='perMachine' />
+
+    <MediaTemplate />
+
+    <Feature Id='ProductFeature' Title="M'awuGab Agent" Level='1'>
+      <ComponentGroupRef Id='ProductComponents' />
+      <ComponentRef Id='CreateDataRoot' />
+      <ComponentRef Id='CreateLogsFolder' />
+      <ComponentRef Id='CreateQueueFolder' />
+      <ComponentRef Id='CreateProcessedFolder' />
+    </Feature>
+
+    <MajorUpgrade DowngradeErrorMessage='A newer version is already installed.' />
+
+    <UIRef Id='WixUI_Minimal' />
+  </Product>
+
+  <Fragment>
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='ProgramFilesFolder'>
+        <Directory Id='INSTALLFOLDER' Name='MawuGab'>
+          <Directory Id='BINFOLDER' Name='bin' />
+        </Directory>
+      </Directory>
+      <Directory Id='ProgramDataFolder'>
+        <Directory Id='DATAFOLDER' Name='MawuGab'>
+          <Directory Id='LOGFOLDER' Name='logs' />
+          <Directory Id='QUEUEFOLDER' Name='queue' />
+          <Directory Id='PROCESSEDFOLDER' Name='processed' />
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id='ProductComponents' Directory='BINFOLDER'>
+      <Component Id='Cmp_MawuGabExe' Guid='*'>
+        <File Id='File_MawuGabExe' Source='$(var.PublishDir)\MawuGab.exe' KeyPath='yes' />
+        <ServiceInstall Id='SvcInstall' Name="M'awuGab Agent" DisplayName="M'awuGab Agent" Type='ownProcess' Start='auto' ErrorControl='normal' Description='MawuGab agent service to collect, compress and upload logs via SFTP.' />
+        <ServiceControl Id='SvcControl' Name="M'awuGab Agent" Start='install' Stop='both' Remove='uninstall' Wait='yes' />
+      </Component>
+      <Component Id='Cmp_AppSettings' Guid='*'>
+        <File Id='File_AppSettings' Source='$(var.PublishDir)\appsettings.json' KeyPath='yes' />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <Component Id='CreateDataRoot' Guid='*' Directory='DATAFOLDER'>
+      <CreateFolder />
+    </Component>
+    <Component Id='CreateLogsFolder' Guid='*' Directory='LOGFOLDER'>
+      <CreateFolder />
+    </Component>
+    <Component Id='CreateQueueFolder' Guid='*' Directory='QUEUEFOLDER'>
+      <CreateFolder />
+    </Component>
+    <Component Id='CreateProcessedFolder' Guid='*' Directory='PROCESSEDFOLDER'>
+      <CreateFolder />
+    </Component>
+  </Fragment>
+</Wix>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{4A2A4A8E-9E3E-4B6D-8B05-2E10C3E7E111}</ProjectGuid>
+    <OutputName>MawuGabInstaller</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath>$(WixToolPath)\Wix.targets</WixTargetsPath>
+    <WixExtension>WixUtilExtension</WixExtension>
+    <!-- Path to published app. Adjust Configuration/Framework/Runtime as needed before build. -->
+    <DefineConstants>PublishDir=..\..\src\MawuGab\bin\Release\net8.0-windows\win-x64\publish</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Product.wxs" />
+  </ItemGroup>
+</Project>
