@@ -26,7 +26,7 @@
     <Compile Remove="Services/SftpUploader.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net8.0-windows'">
-    <PackageReference Include="Renci.SshNet" Version="2023.0.0" />
+    <PackageReference Include="Renci.SshNet" Version="2016.1.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
