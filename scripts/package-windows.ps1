@@ -3,7 +3,8 @@ param(
   [string]$Framework = "net8.0-windows",
   [string]$Runtime = "win-x64",
   [switch]$SelfContained,
-  [string]$SshNetVersion = ""  # optional explicit version override
+  [string]$SshNetVersion = "",  # optional explicit version override
+  [string]$LocalPackages = ""    # optional path to a folder containing .nupkg files
 )
 
 $ErrorActionPreference = "Stop"
@@ -55,6 +56,7 @@ foreach ($ver in $candidates) {
     # Restore first to fail fast
     $restoreArgs = @( "restore", $proj )
     if (Test-Path $nugetConfig) { $restoreArgs += @("--configfile", $nugetConfig) }
+    if (-not [string]::IsNullOrWhiteSpace($LocalPackages) -and (Test-Path $LocalPackages)) { $restoreArgs += @("--source", $LocalPackages) }
     Write-Host "Restoring: dotnet $($restoreArgs -join ' ')" -ForegroundColor Cyan
     & dotnet @restoreArgs
     if ($LASTEXITCODE -ne 0) { throw "restore failed for $ver" }
@@ -67,6 +69,7 @@ foreach ($ver in $candidates) {
       "--self-contained", $scValue
     )
     if (Test-Path $nugetConfig) { $publishArgs += @("--configfile", $nugetConfig) }
+    if (-not [string]::IsNullOrWhiteSpace($LocalPackages) -and (Test-Path $LocalPackages)) { $publishArgs += @("--source", $LocalPackages) }
     Write-Host "Publishing: dotnet $($publishArgs -join ' ')" -ForegroundColor Cyan
     & dotnet @publishArgs
     if ($LASTEXITCODE -ne 0) { throw "publish failed for $ver" }
