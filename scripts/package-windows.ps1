@@ -21,13 +21,14 @@ $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
 # Publish
 $sc = $false
 if ($SelfContained.IsPresent) { $sc = $true }
+$scValue = if ($sc) { "true" } else { "false" }
 
 $publishArgs = @(
   "publish", $proj,
   "-c", $Configuration,
   "-f", $Framework,
   "-r", $Runtime,
-  "--self-contained", ($sc ? "true" : "false")
+  "--self-contained", $scValue
 )
 
 Write-Host "Publishing: dotnet $($publishArgs -join ' ')" -ForegroundColor Cyan
